@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+#define inf 0x3fffff
+#define MAXN 20000
+typedef long long ll;
+using namespace std;
+ll a[MAXN];
+int main()
+{
+    int n;
+    while(cin>>n)
+    {
+        memset(a,0,sizeof a);
+        int pos=0;
+        a[pos]=1;
+        for(int i=1; i<=n; i++)
+        {
+            for(int j=0; j<=pos; j++)
+            {
+                a[j]*=i;
+            }
+            for(int j=0; j<=pos; j++)
+            {
+                a[j+1]+=a[j]/10;
+                a[j]=a[j]%10;
+            }
+            ll tmp=a[pos+1];
+            while(tmp)
+            {
+                a[++pos]=tmp%10;
+                tmp/=10;
+            }
+
+        }
+        for(int i=pos; i>=0; i--)
+            cout<<a[i];
+        cout<<endl;
+    }
+}
+/*
+1
+5
+10
+13
+50
+1000
+*/
