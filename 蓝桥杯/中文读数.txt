@@ -1,0 +1,161 @@
+/*
+中文读数
+范围：0到999，999，999，999
+*/
+#include <bits/stdc++.h>
+#define inf 0x3fffff
+#define MAXN 200
+typedef long long ll;
+using namespace std;
+stack<string> ans;
+string num[10]= {"ling","yi","er","san","si","wu","liu","qi","ba","jiu"};
+string pos[6]= {"","shi","bai","qian","wan","yi"};
+void f1(char ch)
+{
+    ans.push(num[ch-'0']);
+}
+void f2(string str)
+{
+    if(str[1]!='0') f1(str[1]);
+    ans.push(pos[1]);
+    f1(str[0]);
+}
+void f3(string str)
+{
+//    cout<<str<<endl;
+    char tmp=str[0];
+    str.erase(str.begin());
+    if(str[0]=='0' && str[1]=='0')
+    {
+        ;
+    }
+    else if(str[0]=='0')
+    {
+        f1(str[1]);
+        f1('0');
+    }
+    else
+    {
+        f2(str);
+    }
+    ans.push(pos[2]);
+    f1(tmp);
+}
+void f4(string str)
+{
+    char tmp=str[0];
+    str.erase(str.begin());
+    if(str[0]=='0' && str[1]=='0' && str[2]=='0')
+    {
+        ;
+    }
+    else if(str[0]=='0' && str[1]=='0')
+    {
+        f1(str[2]);
+        f1('0');
+    }
+    else if(str[0]=='0')
+    {
+        str.erase(str.begin());
+        f2(str);
+        f1('0');
+    }
+    else
+    {
+        f3(str);
+    }
+    ans.push(pos[3]);
+    f1(tmp);
+}
+void g(string str)
+{
+    bool tmp=false;
+    if(str[0]=='0') tmp=true;
+    while(!str.empty() && str[0]=='0') str.erase(str.begin());
+    if(str.size()==1) f1(str[0]);
+    else if(str.size()==2) f2(str);
+    else if(str.size()==3) f3(str);
+    else if(str.size()==4) f4(str);
+    if(tmp) ans.push(num[0]);
+}
+string f(string str)
+{
+    while(!ans.empty()) ans.pop();
+    vector<string> v;
+    for(int i=str.size()-1; i>=0;)
+    {
+        int cnt=4;
+        string tmp="";
+        while(i>=0 && cnt)
+        {
+            cnt--;
+            tmp+=str[i];
+            i--;
+        }
+        reverse(tmp.begin(),tmp.end());//反转字符串,若是字符数组，用strrev（s）
+        v.push_back(tmp);
+    }
+//    for(int i=0;i<v.size();i++) cout<<v[i]<<endl;exit(0);
+    if(v[0]!="0000") g(v[0]);
+    if(v.size()>=2 && v[1]!="0000")
+    {
+        ans.push(pos[4]);
+        g(v[1]);
+    }
+
+    if(v.size()>=3 && v[2]!="0000")
+    {
+        ans.push(pos[5]);
+        g(v[2]);
+    }
+    string ret="";
+    ret+=ans.top();ans.pop();
+    while(!ans.empty())
+    {
+        ret+=' ';
+        ret+=ans.top();
+        ans.pop();
+    }
+    string tmp="yi shi";
+    bool flag=false;
+    for(int i=0;i<6;i++)
+        if(tmp[i]!=ret[i])
+    {
+        flag=true;
+        break;
+    }
+    if(!flag)
+    {
+        for(int i=0;i<3;i++) ret.erase(ret.begin());
+    }
+    return ret;
+}
+int main()
+{
+    string str;
+    while(cin>>str)
+        cout<<f(str)<<endl;
+}
+/*
+0
+5
+10
+12
+100
+101
+110
+111
+1000
+1001
+1010
+1100
+1101
+1110
+1234
+10001
+11010
+1200000001
+1200100001
+1200100000
+1210101010
+*/
