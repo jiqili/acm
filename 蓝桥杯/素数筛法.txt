@@ -1,0 +1,28 @@
+/*
+ËØÊýÉ¸·¨
+*/
+#include <bits/stdc++.h>
+#define inf 0x3fffff
+#define MAXN 20000
+typedef long long ll;
+using namespace std;
+bool valid[MAXN];
+int prime[MAXN];
+vector<int> v[MAXN];
+int getPrime(int n)
+{
+    memset(valid,true,sizeof valid);
+    int tot=0;
+    for(int i=2; i<=n; i++)
+    {
+        if(valid[i])
+        {
+            prime[tot++]=i;
+        }
+        for(int j=0; ((j<tot) && (i*prime[j]<=n)); j++)
+        {
+            valid[i*prime[j]]=false;
+            if(i%prime[j]==0) break;
+        }
+    }
+}
