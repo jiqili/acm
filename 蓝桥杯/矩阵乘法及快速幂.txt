@@ -1,0 +1,56 @@
+/*
+矩阵乘法及快速幂
+*/
+#include <bits/stdc++.h>
+#define inf 0x3fffff
+#define MAXN 200
+typedef long long ll;
+using namespace std;
+struct matrix
+{
+    int n,m;
+    int a[MAXN][MAXN];
+    void init()
+    {
+        n=m=0;
+        memset(a,0,sizeof a);
+    }
+    matrix operator *(const matrix &b)const
+    {
+        matrix tmp;
+        tmp.init();
+        tmp.m=b.m;
+        tmp.n=b.n;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<b.m;j++)
+            for(int k=0;k<m;k++)
+            tmp.a[i][j]+=a[i][k]*b.a[k][j];
+        return tmp;
+    }
+    void pf()
+    {
+        for(int i=0;i<n;i++)
+        {
+            cout<<a[i][0];
+            for(int j=1;j<m;j++)cout<<' '<<a[i][j];
+            cout<<endl;
+        }
+    }
+};
+matrix fast_pow(matrix ma,int k)
+{
+    matrix ret;
+    ret.init();
+    ret.m=ret.n=ma.m;
+    if(k==0)
+    {
+        for(int i=0;i<ma.m;i++)
+            ret.a[i][i]=1;
+        return ret;
+    }
+    ret=fast_pow(ma,k>>1);
+    ret=ret*ret;
+    if(k&1) ret=ret*ma;
+//    ret.pf();cout<<endl;ma.pf();cout<<endl;
+    return ret;
+}
